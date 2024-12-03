@@ -8,6 +8,7 @@ router.get('/', auth, async (req, res) => {
     try {
         const menuItems = await Menu.find({ isDeleted: false })
             .select('dishName price mealType foodType portionSize'); // Explicitly select the fields we need
+        console.log('Sending menu items:', menuItems);
         res.json(menuItems);
     } catch (error) {
         console.error('Error fetching menu items:', error);

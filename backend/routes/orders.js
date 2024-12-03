@@ -90,12 +90,14 @@ router.get('/', auth, async (req, res) => {
             return res.status(403).json({ message: 'Access denied. Admin only.' });
         }
 
+        console.log('Fetching orders...');
         const orders = await Order.find()
             .populate('userId', 'name email phone')
             .populate('items.menuItemId', 'dishName price')
             .select('_id items totalAmount mealType foodType portionSize status paymentStatus createdAt deliveryAddress specialInstructions userId')
             .sort({ createdAt: -1 });
 
+        console.log('Orders found:', orders.length);
         res.json(orders);
     } catch (error) {
         console.error('Error in GET /orders:', error);

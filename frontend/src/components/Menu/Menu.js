@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaPlus, FaMinus, FaShoppingCart, FaTrash, FaWallet } from 'react-icons/fa';
 import './Menu.css';
+import { API_URL } from '../../services/api';
 
 const Menu = () => {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ const Menu = () => {
   const fetchWalletBalance = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5002/api/wallet/balance', {
+      const response = await axios.get(`${API_URL}/wallet/balance`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -60,7 +61,7 @@ const Menu = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5002/api/menu', {
+      const response = await axios.get(`${API_URL}/api/menu`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -136,7 +137,7 @@ const Menu = () => {
       const selectedItem = menuItems.find(item => item._id === orderItems[0].menuItemId);
       
       // Place the order
-      await axios.post('http://localhost:5002/api/orders', {
+      await axios.post(`${API_URL}/orders`, {
         items: orderItems,
         totalAmount,
         mealType: selectedItem.mealType,
@@ -150,7 +151,7 @@ const Menu = () => {
       });
 
       // Deduct amount from wallet
-      await axios.post('http://localhost:5002/api/wallet/deduct', {
+      await axios.post(`${API_URL}/wallet/deduct`, {
         amount: totalAmount,
         description: 'Order payment'
       }, {

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaUtensils, FaUser, FaShoppingCart,  FaWallet } from 'react-icons/fa';
 import './Dashboard.css';
+import { API_URL } from '../../services/api';
 
 const MemberDashboard = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const MemberDashboard = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5002/api/orders/my-orders', {
+      const response = await axios.get(`${API_URL}/orders/my-orders`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Orders.css';
+import { API_URL } from '../../services/api';
 
 const Orders = () => {
   const navigate = useNavigate();
@@ -16,15 +17,15 @@ const Orders = () => {
 
     try {
       // Test the base API endpoint
-      await axios.get('http://localhost:5002/api/test');
+      await axios.get(`${API_URL}/test`);
 
       // Test the orders router
-      await axios.get('http://localhost:5002/api/orders/test');
+      await axios.get(`${API_URL}/orders/test`);
 
       const token = localStorage.getItem('token');
       if (!token) throw new Error('User is not authenticated.');
 
-      const response = await axios.get('http://localhost:5002/api/orders/my-orders', {
+      const response = await axios.get(`${API_URL}/orders/my-orders`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -52,7 +53,7 @@ const Orders = () => {
       }
 
       // Cancel the order
-      await axios.put(`http://localhost:5002/api/orders/${orderId}/cancel`, {}, {
+      await axios.put(`${API_URL}/orders/${orderId}/cancel`, {}, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -60,7 +61,7 @@ const Orders = () => {
       });
 
       // Refund the amount to wallet
-      await axios.post('http://localhost:5002/api/wallet/add-funds', {
+      await axios.post(`${API_URL}/wallet/add-funds`, {
         amount: order.totalAmount,
         description: `Refund for order #${orderId.slice(-8)}`
       }, {

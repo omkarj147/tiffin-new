@@ -4,6 +4,7 @@ import { FaUserAlt, FaTrash, FaBan, FaCheck } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './UserManagement.css';
+import { API_URL } from '../../services/api';
 
 const UserManagement = ({ onBack }) => {
   const [users, setUsers] = useState([]);
@@ -17,7 +18,7 @@ const UserManagement = ({ onBack }) => {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5002/api/users', {
+      const response = await axios.get(`${API_URL}/users`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsers(response.data);
@@ -32,7 +33,7 @@ const UserManagement = ({ onBack }) => {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        `http://localhost:5002/api/users/${userId}/status`,
+        `${API_URL}/users/${userId}/status`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` }}
       );
@@ -52,7 +53,7 @@ const UserManagement = ({ onBack }) => {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5002/api/users/${userId}`, {
+      await axios.delete(`${API_URL}/users/${userId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       

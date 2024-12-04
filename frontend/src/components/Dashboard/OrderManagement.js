@@ -4,6 +4,7 @@ import {  FaTrash } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './OrderManagement.css';
+import { API_URL } from '../../services/api';
 
 const OrderManagement = ({ onBack }) => {
   const [orders, setOrders] = useState([]);
@@ -19,7 +20,7 @@ const OrderManagement = ({ onBack }) => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5002/api/orders', {
+      const response = await axios.get(`${API_URL}/orders`, {
         headers: {
           Authorization: `Bearer ${token}`
         },
@@ -40,7 +41,7 @@ const OrderManagement = ({ onBack }) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(
-        `http://localhost:5002/api/orders/${orderId}/status`,
+        `${API_URL}/orders/${orderId}/status`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` }}
       );
@@ -59,7 +60,7 @@ const OrderManagement = ({ onBack }) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(
-        `http://localhost:5002/api/orders/${orderId}/payment`,
+        `${API_URL}/orders/${orderId}/payment`,
         { paymentStatus: newStatus },
         { headers: { Authorization: `Bearer ${token}` }}
       );
@@ -79,7 +80,7 @@ const OrderManagement = ({ onBack }) => {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5002/api/orders/${orderId}`, {
+      await axios.delete(`${API_URL}/orders/${orderId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       

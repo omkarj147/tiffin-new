@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './ReportsManagement.css';
+import { API_URL } from '../../services/api';
 
 const ReportsManagement = () => {
   const [totalOrders, setTotalOrders] = useState(0);

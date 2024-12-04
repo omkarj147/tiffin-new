@@ -49,7 +49,7 @@ const Wallet = () => {
     
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5002/api/wallet/add-funds', 
+      await axios.post(`${API_URL}/wallet/add-funds`,  
         { amount: parseFloat(amount) },
         {
           headers: {

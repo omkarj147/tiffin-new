@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import './MenuManagement.css';
+import { API_URL } from '../../services/api';
 
 const MenuManagement = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const MenuManagement = () => {
 
   const fetchMenuItems = async () => {
     try {
-      const response = await axios.get('http://localhost:5002/api/menu');
+      const response = await axios.get(`${API_URL}/menu`);
       setMenuItems(response.data);
     } catch (error) {
       toast.error(error.response?.data?.message || 'Error fetching menu items');
@@ -78,10 +79,10 @@ const MenuManagement = () => {
       };
 
       if (editingId) {
-        await axios.put(`http://localhost:5002/api/menu/${editingId}`, menuItem, config);
+        await axios.put(`${API_URL}/menu/${editingId}`, menuItem, config);
         toast.success('Menu item updated successfully!');
       } else {
-        await axios.post('http://localhost:5002/api/menu', menuItem, config);
+        await axios.post(`${API_URL}/menu`, menuItem, config);
         toast.success('Menu item added successfully!');
       }
       fetchMenuItems();
@@ -114,7 +115,7 @@ const MenuManagement = () => {
             'Authorization': `Bearer ${token}`
           }
         };
-        await axios.delete(`http://localhost:5002/api/menu/${id}`, config);
+        await axios.delete(`${API_URL}/menu/${id}`, config);
         toast.success('Menu item deleted successfully!');
         fetchMenuItems();
       } catch (error) {

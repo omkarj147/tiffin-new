@@ -35,7 +35,7 @@ const ReportsManagement = () => {
       }
 
       const response = await axios.get(
-        'http://localhost:5002/api/reports',
+        `${API_URL}/reports`,
         {
           params: { date },
           headers: {

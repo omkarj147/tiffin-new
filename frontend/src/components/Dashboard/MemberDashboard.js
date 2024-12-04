@@ -5,6 +5,7 @@ import { FaUtensils, FaUser, FaShoppingCart,  FaWallet } from 'react-icons/fa';
 import './Dashboard.css';
 import { API_URL } from '../../services/api';
 
+
 const MemberDashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -35,7 +36,7 @@ const MemberDashboard = () => {
   const fetchWalletBalance = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5002/api/wallet/balance', {
+      const response = await axios.get(`${API_URL}/wallet/balance`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

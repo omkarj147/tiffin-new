@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Wallet.css';
+import { API_URL } from '../../services/api';
 
 const Wallet = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const Wallet = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5002/api/wallet/balance', {
+      const response = await axios.get(`${API_URL}/wallet/balance`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -24,7 +25,7 @@ const Wallet = () => {
       setBalance(response.data.balance);
 
       // Fetch transaction history
-      const transactionsResponse = await axios.get('http://localhost:5002/api/wallet/transactions', {
+      const transactionsResponse = await axios.get(`${API_URL}/wallet/transactions`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

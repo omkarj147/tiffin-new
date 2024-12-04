@@ -61,7 +61,7 @@ const Menu = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/api/menu`, {
+      const response = await axios.get(`${API_URL}/menu`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

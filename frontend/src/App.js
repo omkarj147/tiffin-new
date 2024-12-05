@@ -22,16 +22,6 @@ const Layout = () => {
     <div className="App">
       <Navbar />
       <Outlet />
-      <Footer />
-    </div>
-  );
-};
-
-const NoFooterLayout = () => {
-  return (
-    <div className="App">
-      <Navbar />
-      <Outlet />
     </div>
   );
 };
@@ -47,15 +37,10 @@ const router = createBrowserRouter([
       { path: "menu", element: <Menu /> },
       { path: "orders", element: <Orders /> },
       { path: "wallet", element: <Wallet /> },
-    ]
-  },
-  {
-    element: <NoFooterLayout />,
-    children: [
+      { path: "profile", element: <Profile /> },
       { path: "admin/menu", element: <MenuManagement /> },
       { path: "admin/dashboard", element: <AdminDashboard /> },
-      { path: "profile", element: <Profile /> }
-    ],
+    ]
   },
 ], {
   future: {

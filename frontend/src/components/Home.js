@@ -16,7 +16,7 @@ function Home() {
             Made with love, served with care.
           </p>
           <div className="hero-cta">
-            <button className="cta-button primary" onClick={() => navigate('/login')}>
+            <button className="cta-button primary" onClick={() => navigate('/menu')}>
               Order Now
             </button>
             <button className="cta-button secondary" onClick={() => navigate('/menu')}>

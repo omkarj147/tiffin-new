@@ -72,8 +72,8 @@ const Wallet = () => {
   return (
     <div className="wallet-container">
       <div className="wallet-header">
-        <button className="back-button" onClick={() => navigate('/member/dashboard')}>
-          Back to Dashboard
+        <button className="arrow-button" onClick={() => navigate('/member/dashboard')}>
+          
         </button>
         <h1>My Wallet</h1>
       </div>

@@ -78,12 +78,15 @@ const ReportsManagement = () => {
   };
 
   return (
-    <div>
-      <button className="back-button" onClick={onBack}>
-        ← Back to Dashboard
-      </button>
+    <div className="reports-page">
+      <div className="reports-header-container">
+        <div className="header-card">
+          <button className="arrow-button" onClick={onBack}>
+          </button>
+          <span className="header-title">Reports Management</span>
+        </div>
+      </div>
       <div className="reports-container">
-        <h2>Reports Management</h2>
         <div className="date-filter">
           <input
             type="date"

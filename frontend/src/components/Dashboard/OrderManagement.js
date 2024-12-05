@@ -162,10 +162,9 @@ const OrderManagement = ({ onBack }) => {
     <div className="order-management">
       <div className="order-management-header">
         <div className="header-left">
-          <button className="back-button" onClick={onBack}>
-            ← Back to Dashboard
+          <button className="arrow-button" onClick={onBack}>
           </button>
-          <h2>Order Management</h2>
+          <h3>Order Management</h3>
         </div>
         <div className="header-right">
           <div className="search-filter-container">

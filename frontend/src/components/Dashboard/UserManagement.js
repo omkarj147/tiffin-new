@@ -79,8 +79,8 @@ const UserManagement = ({ onBack }) => {
       
       <div className="user-management-header">
         <div className="header-left">
-          <button className="back-button" onClick={onBack}>
-            ← Back to Dashboard
+          <button className="arrow-button" onClick={onBack}>
+          
           </button>
           <h2>User Management</h2>
         </div>

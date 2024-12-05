@@ -144,8 +144,8 @@ const MenuManagement = () => {
       />
       
       <div className="menu-header">
-        <button className="back-button" onClick={handleBack}>
-          ← Back to Dashboard
+        <button className="arrow-button" onClick={handleBack}>
+        
         </button>
         <h2>Menu Management</h2>
       </div>

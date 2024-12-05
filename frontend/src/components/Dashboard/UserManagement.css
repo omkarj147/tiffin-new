@@ -211,3 +211,27 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+.arrow-button {
+  width: 40px; /* Adjust as needed */
+  height: 40px; /* Adjust as needed */
+  background-color: transparent; /* No background */
+  border: 3px solid #ff6b6b; /* Black border */
+  border-radius: 50%; /* Circular button */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.arrow-button::before {
+  content: '';
+  width: 10px; /* Adjust arrow size */
+  height: 10px;
+  border-left: 3px solid #ff6b6b; /* Arrow thickness and color */
+  border-bottom: 3px solid #ff6b6b;
+  transform: rotate(45deg);
+  position: absolute;
+}

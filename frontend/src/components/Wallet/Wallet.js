@@ -67,8 +67,16 @@ const Wallet = () => {
     }
   };
 
-  if (loading) return <div className="wallet-loading">Loading...</div>;
+  useEffect(() => {
+    fetchWalletData();
+  }, []);
 
+  if (loading) return (
+    <div className="orders-loading">
+      <div className="loader"></div>
+      <p>Loading your Balance...</p>
+    </div>
+  );
   return (
     <div className="wallet-container">
       <div className="wallet-header">

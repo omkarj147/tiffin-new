@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FaPlus, FaMinus, FaShoppingCart, FaTrash, FaWallet } from 'react-icons/fa';
+import { FaPlus, FaMinus, FaShoppingCart, FaWallet, FaTimes } from 'react-icons/fa';
 import './Menu.css';
 import { API_URL } from '../../services/api';
 
@@ -289,18 +289,24 @@ const Menu = () => {
 
         <div className={`order-summary ${cartVisible ? 'visible' : ''}`}>
           <div className="order-summary-header">
-            <h3>Order Summary</h3>
-            <div className="wallet-balance">
-              <FaWallet className="wallet-icon" />
-              <span>Balance: ₹{walletBalance.toFixed(2)}</span>
-            </div>
-            {Object.keys(cart).length > 0 && (
-              <button className="clear-cart-btn" onClick={clearCart}>
-                <FaTrash /> Clear Cart
-              </button>
-            )}
+            <button className="close-btn" onClick={() => setCartVisible(false)}>
+              <FaTimes />
+            </button>
           </div>
-          
+
+          <div className="delivery-info">
+            <div className="timer-icon">🧾</div>
+            <div className="delivery-details">
+              <h2>Order Summary</h2>
+              <p>{getTotalItems()} item{getTotalItems() !== 1 ? 's' : ''}</p>
+            </div>
+          </div>
+
+          <div className="wallet-balance">
+            <FaWallet className="wallet-icon" />
+            <span>Balance: ₹{walletBalance.toFixed(2)}</span>
+          </div>
+
           {Object.keys(cart).length === 0 ? (
             <p className="empty-cart-message">Your cart is empty</p>
           ) : (
@@ -311,30 +317,54 @@ const Menu = () => {
                   if (!item) return null;
                   return (
                     <div key={itemId} className="cart-item">
-                      <div className="cart-item-details">
-                        <span className="item-name">{item.dishName}</span>
-                        <span className="item-quantity">x {quantity}</span>
+                      <div className="cart-item-info">
+                        <div className="cart-item-details">
+                          <span className="item-name">{item.dishName}</span>
+                          <span className="item-weight">75 g</span>
+                          <span className="item-price">₹{item.price}</span>
+                        </div>
+                        <div className="quantity-controls">
+                          <button 
+                            className="quantity-btn"
+                            onClick={() => handleQuantityChange(item._id, -1)}
+                            disabled={quantity === 0}
+                          >
+                            -
+                          </button>
+                          <span className="quantity">{quantity}</span>
+                          <button 
+                            className="quantity-btn"
+                            onClick={() => handleQuantityChange(item._id, 1)}
+                          >
+                            +
+                          </button>
+                        </div>
                       </div>
-                      <span className="item-total">₹{item.price * quantity}</span>
                     </div>
                   );
                 })}
               </div>
-              <div className="cart-summary">
-                <div className="subtotal">
-                  <span>Subtotal</span>
-                  <span>₹{calculateTotal()}</span>
+
+              <div className="voucher-info">
+                <div className="voucher-icon">🎁</div>
+                <div className="voucher-text">
+                  Cancellation Policy
+                  <div className="voucher-subtext">Orders cannot be cancelled once packed for delivery. In case of unexpected delays, a refund will be provided, if applicable</div>
                 </div>
-                <div className="total">
-                  <strong>Total</strong>
-                  <strong>₹{calculateTotal()}</strong>
+              </div>
+
+              <div className="cart-footer">
+                <div className="cart-summary">
+                  <div className="cart-item-count">
+                    <span>1 ITEM</span>
+                  </div>
                 </div>
                 <button 
-                  className="place-order-btn"
+                  className="next-btn"
                   onClick={handlePlaceOrder}
                   disabled={loading || Object.keys(cart).length === 0}
                 >
-                  {loading ? 'Placing Order...' : 'Place Order'}
+                  {loading ? 'Processing...' : 'Next →'}
                 </button>
               </div>
             </>

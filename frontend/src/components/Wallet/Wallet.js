@@ -79,16 +79,15 @@ const Wallet = () => {
   );
   return (
     <div className="wallet-container">
-      <div className="wallet-header">
-        <button className="arrow-button" onClick={() => navigate('/member/dashboard')}>
-          
-        </button>
-        <h1>My Wallet</h1>
+      <div className="header-container">
+        <button className="arrow-button" onClick={() => navigate('/member/dashboard')}></button>
+        <div className="title-card">
+          <h2>My Wallet</h2>
+          <span className="wallet-balance">Balance: ₹{balance.toFixed(2)}</span>
+        </div>
       </div>
 
       <div className="wallet-balance-card">
-        <h2>Current Balance</h2>
-        <div className="balance-amount">₹{balance.toFixed(2)}</div>
         <button 
           className="add-funds-button"
           onClick={() => setShowAddFunds(true)}

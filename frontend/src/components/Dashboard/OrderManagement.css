@@ -221,7 +221,59 @@
   border-top: 1px solid #f0f0f0;
 }
 
-.status-actions select,
+.status-actions select {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  background-color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  min-width: 140px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+}
+
+.status-actions select:hover {
+  border-color: #2196f3;
+  box-shadow: 0 4px 8px rgba(33, 150, 243, 0.1);
+}
+
+.status-actions select:focus {
+  outline: none;
+  border-color: #2196f3;
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+}
+
+.status-actions select option[value="pending"] {
+  color: #ffa500;
+}
+
+.status-actions select option[value="confirmed"] {
+  color: #2196f3;
+}
+
+.status-actions select option[value="preparing"] {
+  color: #9c27b0;
+}
+
+.status-actions select option[value="ready"] {
+  color: #4caf50;
+}
+
+.status-actions select option[value="delivered"] {
+  color: #006400;
+}
+
+.status-actions select option[value="cancelled"] {
+  color: #f44336;
+}
+
 .payment-actions select {
   padding: 0.6rem 1rem;
   border: 1px solid #e0e0e0;
@@ -232,16 +284,18 @@
   transition: all 0.3s ease;
 }
 
-.status-actions select:hover,
 .payment-actions select:hover {
   border-color: #1a73e8;
 }
 
-.status-actions select:focus,
 .payment-actions select:focus {
   outline: none;
   border-color: #1a73e8;
   box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+}
+
+.payment-status-actions {
+  display: none;
 }
 
 .delete-button {
@@ -323,11 +377,10 @@
 
 
 .arrow-button {
-  width: 40px; /* Adjust as needed */
-  height: 40px; /* Adjust as needed */
-  background-color: transparent; /* No background */
-  border: 3px solid #ff6b6b; /* Black border */
-  border-radius: 50%; /* Circular button */
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -337,9 +390,9 @@
 
 .arrow-button::before {
   content: '';
-  width: 10px; /* Adjust arrow size */
+  width: 10px;
   height: 10px;
-  border-left: 3px solid #ff6b6b; /* Arrow thickness and color */
+  border-left: 3px solid #ff6b6b;
   border-bottom: 3px solid #ff6b6b;
   transform: rotate(45deg);
   position: absolute;

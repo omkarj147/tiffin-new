@@ -44,6 +44,7 @@ const ReportsManagement = () => {
           }
         }
       );
+      
 
       if (response.data) {
         setTotalOrders(response.data.totalOrders || 0);
@@ -83,7 +84,10 @@ const ReportsManagement = () => {
         <div className="header-card">
           <button className="arrow-button" onClick={onBack}>
           </button>
-          <span className="header-title">Reports Management</span>
+          <div className="header-title-container">
+            <span className="header-title">Reports</span>
+            <span className="orders-count">{totalOrders} Orders</span>
+          </div>
         </div>
       </div>
       <div className="reports-container">

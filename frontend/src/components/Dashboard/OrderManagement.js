@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {  FaTrash } from 'react-icons/fa';
+import { FaTrash } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './OrderManagement.css';
@@ -43,35 +43,16 @@ const OrderManagement = ({ onBack }) => {
       const response = await axios.put(
         `${API_URL}/orders/${orderId}/status`,
         { status: newStatus },
-        { headers: { Authorization: `Bearer ${token}` }}
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      
+
       setOrders(orders.map(order => 
         order._id === orderId ? response.data : order
       ));
-      
+
       toast.success(`Order status updated to ${newStatus}`);
     } catch (error) {
       toast.error(error.response?.data?.message || 'Error updating order status');
-    }
-  };
-
-  const handlePaymentStatusChange = async (orderId, newStatus) => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axios.put(
-        `${API_URL}/orders/${orderId}/payment`,
-        { paymentStatus: newStatus },
-        { headers: { Authorization: `Bearer ${token}` }}
-      );
-      
-      setOrders(orders.map(order => 
-        order._id === orderId ? response.data : order
-      ));
-      
-      toast.success(`Payment status updated to ${newStatus}`);
-    } catch (error) {
-      toast.error(error.response?.data?.message || 'Error updating payment status');
     }
   };
 
@@ -92,24 +73,22 @@ const OrderManagement = ({ onBack }) => {
   };
 
   const getStatusColor = (status) => {
-    const colors = {
-      pending: '#ffa500',
-      confirmed: '#007bff',
-      preparing: '#800080',
-      ready: '#008000',
-      delivered: '#006400',
-      cancelled: '#ff0000'
-    };
-    return colors[status] || '#000000';
-  };
-
-  const getPaymentStatusColor = (status) => {
-    const colors = {
-      pending: '#ffa500',
-      completed: '#008000',
-      failed: '#ff0000'
-    };
-    return colors[status] || '#000000';
+    switch (status) {
+      case 'pending':
+        return '#FCD34D';
+      case 'confirmed':
+        return '#60A5FA';
+      case 'preparing':
+        return '#F59E0B';
+      case 'ready':
+        return '#34D399';
+      case 'delivered':
+        return '#10B981';
+      case 'cancelled':
+        return '#EF4444';
+      default:
+        return '#6B7280';
+    }
   };
 
   const getFilteredOrders = () => {
@@ -246,6 +225,12 @@ const OrderManagement = ({ onBack }) => {
                 </div>
 
                 <div className="order-actions">
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDeleteOrder(order._id)}
+                  >
+                    <FaTrash />
+                  </button>
                   {activeTab === 'active' && (
                     <div className="status-actions">
                       <select
@@ -262,23 +247,6 @@ const OrderManagement = ({ onBack }) => {
                       </select>
                     </div>
                   )}
-                  <div className="payment-actions">
-                    <select
-                      value={order.paymentStatus}
-                      onChange={(e) => handlePaymentStatusChange(order._id, e.target.value)}
-                      style={{ color: getPaymentStatusColor(order.paymentStatus) }}
-                    >
-                      <option value="pending">Payment Pending</option>
-                      <option value="completed">Payment Completed</option>
-                      <option value="failed">Payment Failed</option>
-                    </select>
-                  </div>
-                  <button
-                    className="delete-button"
-                    onClick={() => handleDeleteOrder(order._id)}
-                  >
-                    <FaTrash />
-                  </button>
                 </div>
               </div>
             ))}

@@ -228,11 +228,6 @@
   transition: all 0.2s ease;
 }
 
-.quantity-btn:hover:not(.disabled) {
-  background: #e9ecef;
-  border-color: #ced4da;
-}
-
 .quantity-btn.disabled {
   opacity: 0.5;
   cursor: not-allowed;

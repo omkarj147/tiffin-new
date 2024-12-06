@@ -298,7 +298,7 @@ const Menu = () => {
             <div className="timer-icon">🧾</div>
             <div className="delivery-details">
               <h2>Order Summary</h2>
-              <p>{getTotalItems()} item{getTotalItems() !== 1 ? 's' : ''}</p>
+              <p>Got</p>
             </div>
           </div>
 
@@ -320,7 +320,9 @@ const Menu = () => {
                       <div className="cart-item-info">
                         <div className="cart-item-details">
                           <span className="item-name">{item.dishName}</span>
-                          <span className="item-weight">75 g</span>
+                          <span className="item-weight">{item.portionSize}</span>
+                          <span className="item-weight">{item.mealType}</span>
+                          <span className="item-weight">{item.foodType}</span>  
                           <span className="item-price">₹{item.price}</span>
                         </div>
                         <div className="quantity-controls">
@@ -356,7 +358,7 @@ const Menu = () => {
               <div className="cart-footer">
                 <div className="cart-summary">
                   <div className="cart-item-count">
-                    <span>1 ITEM</span>
+                    <span>{getTotalItems()} item{getTotalItems() !== 1 ? 's' : ''}</span>
                   </div>
                 </div>
                 <button 

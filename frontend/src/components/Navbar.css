@@ -1,7 +1,7 @@
 /* Navbar.css */
 
 .navbar {
-  background: #ff6b6b;
+  background: #1a1a1a;
   height: 80px;
   display: flex;
   justify-content: space-between;
@@ -145,7 +145,7 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: #ff6b6b;
+    background: #1a1a1a;
     flex-direction: column;
     padding: 1rem;
     gap: 1rem;

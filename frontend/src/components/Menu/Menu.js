@@ -211,7 +211,7 @@ const Menu = () => {
         <h1>Today's Menu</h1>
         <div className="header-actions">
           <button 
-            className="cart-toggle-btn"
+            className="cart-btn"
             onClick={() => setCartVisible(!cartVisible)}
           >
             <FaShoppingCart />
@@ -219,8 +219,7 @@ const Menu = () => {
               <span className="cart-badge">{getTotalItems()}</span>
             )}
           </button>
-          <button className="back-btn" onClick={() => navigate('/member/dashboard')}>
-            Back to Dashboard
+          <button className="arrow-button" onClick={() => navigate('/member/dashboard')}>
           </button>
         </div>
       </div>

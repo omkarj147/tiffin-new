@@ -1,20 +1,20 @@
 .auth-container {
-  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+  background: linear-gradient(135deg, #1a1a1a 0%, #65676b 100%);
+  min-height: 100vh;
   padding: 20px;
-  margin-top: 0px;
 }
 
 .auth-box {
   background: rgba(255, 255, 255, 0.95);
-  padding: 2rem;
+  padding: 2.5rem;
   border-radius: 20px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 400px;
+  backdrop-filter: blur(10px);
 }
 
 .auth-header {
@@ -23,14 +23,16 @@
 }
 
 .auth-header h2 {
-  color: #2d3436;
+  color: #1a1a1a;
   font-size: 2rem;
   margin-bottom: 0.5rem;
+  font-weight: 600;
 }
 
 .auth-header p {
-  color: #636e72;
+  color: #65676b;
   font-size: 1rem;
+  margin: 0;
 }
 
 .auth-form {
@@ -41,21 +43,29 @@
 
 .form-group {
   position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center
 }
 
 .form-group input {
-  width: 90%;
-  padding: 12px 15px;
-  border: 2px solid #dfe6e9;
-  border-radius: 10px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  background: transparent;
+  width: 400px;
+  height: 36px;
+  padding: 0 12px;
+  border: 2px solid #e1e1e1;
+  border-radius: 8px;
+  font-size: 14px;
+  background: white;
+  color: #1a1a1a;
+  box-sizing: border-box;
 }
 
 .form-group input:focus {
-  border-color: #ff6b6b;
+  border-color: #1a1a1a;
   outline: none;
+  box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.1);
 }
 
 .form-group label {
@@ -63,95 +73,99 @@
   left: 15px;
   top: 50%;
   transform: translateY(-50%);
-  background: white;
-  padding: 0 5px;
-  color: #636e72;
-  font-size: 0.9rem;
+  color: #65676b;
   transition: all 0.3s ease;
   pointer-events: none;
+  font-size: 1rem;
 }
 
 .form-group input:focus + label,
 .form-group input:not(:placeholder-shown) + label {
   top: 0;
+  left: 10px;
   font-size: 0.8rem;
-  color: #ff6b6b;
+  padding: 0 5px;
+  background: white;
+  color: #1a1a1a;
 }
 
 .auth-button {
-  background: #ff6b6b;
+  background: #1a1a1a;
   color: white;
-  padding: 12px;
+  padding: 15px;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .auth-button:hover {
-  background: #ff5252;
-  transform: translateY(-2px);
+  background: #333;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.auth-button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-}
-
-.auth-switch {
-  text-align: center;
-  margin-top: 1.5rem;
-}
-
-.auth-switch p {
-  color: #636e72;
-  font-size: 0.9rem;
-}
-
-.auth-switch a {
-  color: #ff6b6b;
-  text-decoration: none;
-  font-weight: 600;
-  margin-left: 5px;
-}
-
-.auth-switch a:hover {
-  color: #ff5252;
+.auth-button:active {
+  transform: translateY(0);
 }
 
 .user-type-selector {
   display: flex;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  justify-content: center;
 }
 
 .user-type-button {
-  flex: 1;
-  padding: 10px;
-  border: 2px solid #dfe6e9;
-  border-radius: 10px;
+  padding: 10px 25px;
+  border: 2px solid #1a1a1a;
+  border-radius: 30px;
   background: transparent;
-  color: #636e72;
+  color: #1a1a1a;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .user-type-button.active {
-  background: #ff6b6b;
+  background: #1a1a1a;
   color: white;
-  border-color: #ff6b6b;
+}
+
+.user-type-button:hover:not(.active) {
+  background: rgba(26, 26, 26, 0.1);
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #65676b;
+}
+
+.auth-switch a {
+  color: #1a1a1a;
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 5px;
+  transition: all 0.3s ease;
+}
+
+.auth-switch a:hover {
+  text-decoration: underline;
 }
 
 .error-message {
-  background-color: #ffe5e5;
-  color: #ff3333;
-  padding: 10px;
-  border-radius: 5px;
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 12px;
+  border-radius: 8px;
   margin-bottom: 1rem;
-  text-align: center;
   font-size: 0.9rem;
+  text-align: center;
 }
 
 @media screen and (max-width: 480px) {

@@ -108,10 +108,14 @@ const Orders = () => {
           {successMessage}
         </div>
       )}
-      <div className="orders-header">
-        <button className="back-button" onClick={() => navigate('/member/dashboard')}>Back to Dashboard</button>
-        <h1>My Orders</h1>
-        <div className="orders-count">{orders.length} {orders.length === 1 ? 'Order' : 'Orders'}</div>
+      <div className="header-container">
+        <div className="arrow-container">
+          <button className="arrow-button" onClick={() => navigate('/member/dashboard')}></button>
+        </div>
+        <div className="title-card">
+          <h2>My Orders</h2>
+          <span className="orders-count">{orders.length} {orders.length === 1 ? 'Order' : 'Orders'}</span>
+        </div>
       </div>
 
       {/* Active Orders Section */}

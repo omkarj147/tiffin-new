@@ -1,8 +1,25 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const dotenv = require('dotenv');
 const path = require('path');
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+const app = express();
+
+// CORS configuration
+app.use(cors({
+    origin: [
+        'https://tiffin-new-1.onrender.com',
+        'http://localhost:3000'
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+app.use(express.json());
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -12,33 +29,6 @@ const orderRoutes = require('./routes/orders');
 const reportRoutes = require('./routes/reports');
 const seedRoutes = require('./routes/seed');
 const walletRoutes = require('./routes/wallet');
-const pwaRoutes = require('./routes/pwaRoutes');
-
-dotenv.config();
-const app = express();
-
-// Middleware
-app.use(cors({
-    origin: [
-        'https://tiffin-new-1.onrender.com', 
-        'https://tiffin-new.onrender.com',
-        'http://localhost:3000', 
-        'http://localhost:5002'
-    ],
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
-app.use(express.json());
-
-// Serve static files from the React app with cache control
-app.use(express.static(path.join(__dirname, '../frontend/build'), {
-    setHeaders: (res, path) => {
-        if (path.endsWith('.html')) {
-            res.setHeader('Cache-Control', 'no-cache');
-        }
-    }
-}));
 
 // API Routes
 app.use('/api/auth', authRoutes);
@@ -49,6 +39,33 @@ app.use('/api/reports', reportRoutes);
 app.use('/api/seed', seedRoutes);
 app.use('/api/wallet', walletRoutes);
 
+// Serve static files
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+// Handle PWA manifest and service worker
+app.get('/manifest.json', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/build/manifest.json'));
+});
+
+app.get('/service-worker.js', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/build/service-worker.js'));
+});
+
+// Catch-all route handler for client-side routing
+app.get('*', (req, res) => {
+    // Don't serve index.html for API routes
+    if (req.path.startsWith('/api')) {
+        return res.status(404).json({ message: 'API endpoint not found' });
+    }
+    res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ message: 'Something went wrong!' });
+});
+
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
@@ -56,29 +73,5 @@ mongoose.connect(process.env.MONGODB_URI, {
 })
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('MongoDB connection error:', err));
-
-// Test route
-app.get('/api/test', (req, res) => {
-    res.json({ message: 'Server is running' });
-});
-
-// Error handling middleware for API routes
-app.use('/api', (err, req, res, next) => {
-    console.error('API Error:', err);
-    res.status(err.status || 500).json({ 
-        message: err.message || 'Something went wrong!',
-        error: process.env.NODE_ENV === 'development' ? err : {}
-    });
-});
-
-// Catch-all route for SPA routing
-app.get('*', (req, res) => {
-    // Only serve index.html for non-API routes
-    if (!req.path.startsWith('/api')) {
-        res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
-    } else {
-        res.status(404).json({ message: 'Not Found' });
-    }
-});
 
 module.exports = app;

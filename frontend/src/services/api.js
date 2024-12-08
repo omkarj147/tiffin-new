@@ -8,7 +8,7 @@ const getApiUrl = () => {
     } else if (hostname === 'tiffin-new-1.onrender.com') {
         return 'https://tiffin-new.onrender.com/api';
     }
-    return '/api'; // fallback
+    return 'https://tiffin-new.onrender.com/api'; // default to production // fallback
 };
 
 export const API_URL = getApiUrl();
@@ -29,9 +29,12 @@ api.interceptors.request.use((config) => {
         config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
+},
+(error) => {
+    return Promise.reject(error);
 });
 
-// Add error interceptor
+// Add response interceptor for error handling
 api.interceptors.response.use(
     response => response,
     error => {

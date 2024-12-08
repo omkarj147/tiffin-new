@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { FaPlus, FaMinus, FaShoppingCart, FaWallet, FaTimes } from 'react-icons/fa';
 import './Menu.css';
-import { API_URL } from '../../services/api';
+import api from '../../services/api';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -17,6 +16,86 @@ const Menu = () => {
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [walletBalance, setWalletBalance] = useState(0);
   const [insufficientFunds, setInsufficientFunds] = useState(false);
+
+  const fetchWalletBalance = useCallback(async () => {
+    try {
+      const response = await api.get('/wallet/balance');
+      setWalletBalance(response.data.balance);
+    } catch (err) {
+      console.error('Error fetching wallet balance:', err);
+    }
+  }, []);
+
+  const fetchMenu = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        setError('Authentication token not found');
+        navigate('/login');
+        return;
+      }
+
+      console.log('Fetching menu items...');
+      const response = await api.get('/menu');
+      
+      console.log('Menu response:', response.data);
+      
+      if (!response.data) {
+        throw new Error('No data received from server');
+      }
+
+      // Ensure response.data is an array
+      const items = Array.isArray(response.data) ? response.data : [];
+      
+      if (items.length === 0) {
+        console.warn('No menu items received from server');
+        setError('No menu items available');
+        setMenuItems([]);
+        return;
+      }
+      
+      // Validate menu items have required fields
+      const validItems = items.filter(item => {
+        if (!item || typeof item !== 'object') {
+          console.warn('Invalid menu item received:', item);
+          return false;
+        }
+        
+        const hasRequiredFields = 
+          item._id && 
+          item.dishName && 
+          item.price && 
+          item.mealType && 
+          item.foodType && 
+          item.portionSize;
+          
+        if (!hasRequiredFields) {
+          console.warn(`Menu item ${item._id || 'unknown'} missing required fields:`, item);
+          return false;
+        }
+        
+        return true;
+      });
+
+      console.log('Valid menu items:', validItems);
+
+      if (validItems.length === 0) {
+        setError('No valid menu items available');
+      } else {
+        setMenuItems(validItems);
+        setError(null);
+      }
+    } catch (error) {
+      console.error('Error fetching menu:', error);
+      setError(error.response?.data?.message || error.message || 'Failed to fetch menu items');
+      setMenuItems([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [navigate]);
 
   // Load cart from localStorage on component mount
   useEffect(() => {
@@ -35,60 +114,24 @@ const Menu = () => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
 
-  const fetchWalletBalance = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/wallet/balance`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      setWalletBalance(response.data.balance);
-    } catch (err) {
-      console.error('Error fetching wallet balance:', err);
-    }
-  };
-
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
       navigate('/login');
       return;
     }
+    
+    console.log('Initial menu fetch...');
     fetchMenu();
     fetchWalletBalance();
-  }, [navigate]);
 
-  const fetchMenu = async () => {
-    try {
-      setLoading(true);
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/menu`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      
-      const items = response.data;
-      
-      // Validate menu items have required fields
-      const validItems = items.map(item => {
-        if (!item.mealType) console.warn(`Menu item ${item._id} missing mealType`);
-        if (!item.foodType) console.warn(`Menu item ${item._id} missing foodType`);
-        if (!item.portionSize) console.warn(`Menu item ${item._id} missing portionSize`);
-        return item;
-      });
-
-      setMenuItems(validItems);
-      setError(null);
-    } catch (error) {
-      console.error('Error fetching menu:', error);
-      setError('Failed to fetch menu items');
-    } finally {
+    // Cleanup function
+    return () => {
+      setMenuItems([]);
       setLoading(false);
-    }
-  };
+      setError(null);
+    };
+  }, [navigate, fetchMenu, fetchWalletBalance]);
 
   const calculateTotal = useCallback(() => {
     return Object.entries(cart).reduce((total, [itemId, quantity]) => {
@@ -130,7 +173,6 @@ const Menu = () => {
       }
 
       setLoading(true);
-      const token = localStorage.getItem('token');
       const orderItems = Object.keys(cart).map(itemId => ({
         menuItemId: itemId,
         quantity: cart[itemId]
@@ -139,28 +181,18 @@ const Menu = () => {
       const selectedItem = menuItems.find(item => item._id === orderItems[0].menuItemId);
       
       // Place the order
-      await axios.post(`${API_URL}/orders`, {
+      await api.post('/orders', {
         items: orderItems,
         totalAmount,
         mealType: selectedItem.mealType,
         foodType: selectedItem.foodType,
         portionSize: selectedItem.portionSize
-      }, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
       });
 
       // Deduct amount from wallet
-      await axios.post(`${API_URL}/wallet/deduct`, {
+      await api.post('/wallet/deduct', {
         amount: totalAmount,
         description: 'Order payment'
-      }, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
       });
 
       // Update wallet balance in state

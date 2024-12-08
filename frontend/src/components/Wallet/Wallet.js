@@ -32,10 +32,13 @@ const Wallet = () => {
           Authorization: `Bearer ${token}`
         }
       });
-      setTransactions(transactionsResponse.data);
+      // Ensure transactions is always an array
+      setTransactions(Array.isArray(transactionsResponse.data) ? transactionsResponse.data : []);
     } catch (err) {
       setError('Failed to fetch wallet data');
       console.error('Error:', err);
+      // Initialize empty arrays on error
+      setTransactions([]);
     } finally {
       setLoading(false);
     }
@@ -99,7 +102,7 @@ const Wallet = () => {
         <button className="arrow-button" onClick={() => navigate('/member/dashboard')}></button>
         <div className="title-card">
           <h2>My Wallet</h2>
-          <span className="wallet-balance">Balance: ₹{balance.toFixed(2)}</span>
+          <span className="wallet-balance">Balance: ₹{(balance || 0).toFixed(2)}</span>
         </div>
       </div>
 
@@ -119,13 +122,14 @@ const Wallet = () => {
             {error && <div className="error-message">{error}</div>}
             <form onSubmit={handleAddFunds}>
               <div className="form-group">
-                <label></label>
+                <label>Amount (₹)</label>
                 <input
                   type="number"
                   min="1"
                   step="any"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
+                  placeholder="Enter amount"
                   required
                 />
               </div>
@@ -140,18 +144,22 @@ const Wallet = () => {
 
       <div className="transactions-section">
         <h2>Transaction History</h2>
-        {transactions.length === 0 ? (
+        {loading ? (
+          <div className="loading">Loading transactions...</div>
+        ) : error ? (
+          <div className="error-message">{error}</div>
+        ) : !Array.isArray(transactions) || transactions.length === 0 ? (
           <p className="no-transactions">No transactions yet</p>
         ) : (
           <div className="transactions-list">
             {transactions.map(transaction => (
-              <div key={transaction._id} className="transaction-card">
+              <div key={transaction._id || Math.random()} className="transaction-card">
                 <div className="transaction-type">
                   {transaction.type === 'credit' ? '+ ' : '- '}
-                  ₹{transaction.amount.toFixed(2)}
+                  ₹{(transaction.amount || 0).toFixed(2)}
                 </div>
                 <div className="transaction-details">
-                  <span className="transaction-description">{transaction.description}</span>
+                  <span className="transaction-description">{transaction.description || 'Transaction'}</span>
                   <span className="transaction-date">
                     {new Date(transaction.createdAt).toLocaleDateString()}
                   </span>

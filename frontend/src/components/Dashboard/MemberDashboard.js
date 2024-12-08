@@ -108,7 +108,7 @@ const MemberDashboard = () => {
         <div className="dashboard-card">
           <FaWallet className="card-icon" />
           <h3>My Wallet</h3>
-          <p>Balance: ₹{walletBalance.toFixed(2)}</p>
+          <p>Balance: ₹{(walletBalance || 0).toFixed(2)}</p>
           <button 
             className="dashboard-button"
             onClick={() => navigate('/wallet')}

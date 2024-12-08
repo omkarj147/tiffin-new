@@ -16,12 +16,6 @@ const Orders = () => {
     setError(null);
 
     try {
-      // Test the base API endpoint
-      await axios.get(`${API_URL}/test`);
-
-      // Test the orders router
-      await axios.get(`${API_URL}/orders/test`);
-
       const token = localStorage.getItem('token');
       if (!token) throw new Error('User is not authenticated.');
 
@@ -32,10 +26,12 @@ const Orders = () => {
         },
       });
 
-      setOrders(response.data);
+      // Ensure orders is always an array
+      setOrders(Array.isArray(response.data) ? response.data : []);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to fetch orders.');
       console.error('Error fetching orders:', err);
+      setOrders([]); // Initialize to empty array on error
     } finally {
       setLoading(false);
     }
@@ -114,7 +110,9 @@ const Orders = () => {
         </div>
         <div className="title-card">
           <h2>My Orders</h2>
-          <span className="orders-count">{orders.length} {orders.length === 1 ? 'Order' : 'Orders'}</span>
+          <span className="orders-count">
+            {Array.isArray(orders) ? `${orders.length} ${orders.length === 1 ? 'Order' : 'Orders'}` : '0 Orders'}
+          </span>
         </div>
       </div>
 
@@ -122,65 +120,75 @@ const Orders = () => {
       <div className="orders-section">
         <h2 className="section-title">Active Orders</h2>
         <div className="orders-list">
-          {orders
-            .filter(order => !['cancelled', 'delivered'].includes(order.status.toLowerCase()))
-            .map(order => (
-              <div key={order._id} className="order-card">
-                <div className="order-card-header">
-                  <div className="order-info">
-                    <div className="order-number">
-                      <span className="label">Order #</span>
-                      <span className="value">{order._id.slice(-8)}</span>
-                    </div>
-                    <div className={`order-status status-${order.status.toLowerCase()}`}>
-                      {order.status}
-                    </div>
-                  </div>
-                  <div className="order-date">
-                    {new Date(order.createdAt).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric'
-                    })}
-                  </div>
-                </div>
-
-                <div className="order-items-list">
-                  {order.items.map(item => (
-                    <div key={item.menuItemId._id} className="order-item">
-                      <div className="item-details">
-                        <span className="item-name">{item.menuItemId.dishName}</span>
-                        <div className="item-meta">
-                          <span className="item-quantity">Qty: {item.quantity}</span>
-                          <span className="item-price">
-                            ₹{(item.menuItemId.price * item.quantity).toFixed(2)}
-                          </span>
-                        </div>
+          {Array.isArray(orders) ? (
+            orders
+              .filter(order => order && order.status && !['cancelled', 'delivered'].includes(order.status.toLowerCase()))
+              .map(order => (
+                <div key={order._id || Math.random()} className="order-card">
+                  <div className="order-card-header">
+                    <div className="order-info">
+                      <div className="order-number">
+                        <span className="label">Order #</span>
+                        <span className="value">{(order._id || '').slice(-8)}</span>
+                      </div>
+                      <div className={`order-status status-${(order.status || '').toLowerCase()}`}>
+                        {order.status || 'Unknown'}
                       </div>
                     </div>
-                  ))}
-                </div>
-
-                <div className="order-card-footer">
-                  <div className="order-total">
-                    <span className="total-label">Total Amount</span>
-                    <span className="total-value">₹{order.totalAmount.toFixed(2)}</span>
+                    <div className="order-date">
+                      {order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      }) : 'Date not available'}
+                    </div>
                   </div>
-                  <button 
-                    className="cancel-order-btn" 
-                    onClick={() => cancelOrder(order._id)}
-                  >
-                    Cancel Order
-                    <span className="btn-icon">×</span>
-                  </button>
+
+                  <div className="order-items-list">
+                    {Array.isArray(order.items) ? order.items.map(item => (
+                      <div key={item.menuItemId?._id || Math.random()} className="order-item">
+                        <div className="item-details">
+                          <span className="item-name">{item.menuItemId?.dishName || 'Unknown Item'}</span>
+                          <div className="item-meta">
+                            <span className="item-quantity">Qty: {item.quantity || 0}</span>
+                            <span className="item-price">
+                              ₹{((item.menuItemId?.price || 0) * (item.quantity || 0)).toFixed(2)}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )) : (
+                      <div className="no-items">No items available</div>
+                    )}
+                  </div>
+
+                  <div className="order-card-footer">
+                    <div className="order-total">
+                      <span className="total-label">Total Amount</span>
+                      <span className="total-value">₹{(order.totalAmount || 0).toFixed(2)}</span>
+                    </div>
+                    <button 
+                      className="cancel-order-btn" 
+                      onClick={() => order._id && cancelOrder(order._id)}
+                      disabled={!order._id}
+                    >
+                      Cancel Order
+                      <span className="btn-icon">×</span>
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-            {orders.filter(order => !['cancelled', 'delivered'].includes(order.status.toLowerCase())).length === 0 && (
-              <div className="no-orders">
-                <p>No active orders at the moment</p>
-              </div>
-            )}
+              ))
+          ) : (
+            <div className="no-orders">
+              <p>No active orders at the moment</p>
+            </div>
+          )}
+          {Array.isArray(orders) && 
+            orders.filter(order => order && order.status && !['cancelled', 'delivered'].includes(order.status.toLowerCase())).length === 0 && (
+            <div className="no-orders">
+              <p>No active orders at the moment</p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -188,58 +196,67 @@ const Orders = () => {
       <div className="orders-section">
         <h2 className="section-title">Past Orders</h2>
         <div className="orders-list">
-          {orders
-            .filter(order => ['cancelled', 'delivered'].includes(order.status.toLowerCase()))
-            .map(order => (
-              <div key={order._id} className="order-card">
-                <div className="order-card-header">
-                  <div className="order-info">
-                    <div className="order-number">
-                      <span className="label">Order #</span>
-                      <span className="value">{order._id.slice(-8)}</span>
-                    </div>
-                    <div className={`order-status status-${order.status.toLowerCase()}`}>
-                      {order.status}
-                    </div>
-                  </div>
-                  <div className="order-date">
-                    {new Date(order.createdAt).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric'
-                    })}
-                  </div>
-                </div>
-
-                <div className="order-items-list">
-                  {order.items.map(item => (
-                    <div key={item.menuItemId._id} className="order-item">
-                      <div className="item-details">
-                        <span className="item-name">{item.menuItemId.dishName}</span>
-                        <div className="item-meta">
-                          <span className="item-quantity">Qty: {item.quantity}</span>
-                          <span className="item-price">
-                            ₹{(item.menuItemId.price * item.quantity).toFixed(2)}
-                          </span>
-                        </div>
+          {Array.isArray(orders) ? (
+            orders
+              .filter(order => order && order.status && ['cancelled', 'delivered'].includes(order.status.toLowerCase()))
+              .map(order => (
+                <div key={order._id || Math.random()} className="order-card">
+                  <div className="order-card-header">
+                    <div className="order-info">
+                      <div className="order-number">
+                        <span className="label">Order #</span>
+                        <span className="value">{(order._id || '').slice(-8)}</span>
+                      </div>
+                      <div className={`order-status status-${(order.status || '').toLowerCase()}`}>
+                        {order.status || 'Unknown'}
                       </div>
                     </div>
-                  ))}
-                </div>
+                    <div className="order-date">
+                      {order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      }) : 'Date not available'}
+                    </div>
+                  </div>
 
-                <div className="order-card-footer">
-                  <div className="order-total">
-                    <span className="total-label">Total Amount</span>
-                    <span className="total-value">₹{order.totalAmount.toFixed(2)}</span>
+                  <div className="order-items-list">
+                    {Array.isArray(order.items) ? order.items.map(item => (
+                      <div key={item.menuItemId?._id || Math.random()} className="order-item">
+                        <div className="item-details">
+                          <span className="item-name">{item.menuItemId?.dishName || 'Unknown Item'}</span>
+                          <div className="item-meta">
+                            <span className="item-quantity">Qty: {item.quantity || 0}</span>
+                            <span className="item-price">
+                              ₹{((item.menuItemId?.price || 0) * (item.quantity || 0)).toFixed(2)}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )) : (
+                      <div className="no-items">No items available</div>
+                    )}
+                  </div>
+
+                  <div className="order-card-footer">
+                    <div className="order-total">
+                      <span className="total-label">Total Amount</span>
+                      <span className="total-value">₹{(order.totalAmount || 0).toFixed(2)}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-            {orders.filter(order => ['cancelled', 'delivered'].includes(order.status.toLowerCase())).length === 0 && (
-              <div className="no-orders">
-                <p>No past orders</p>
-              </div>
-            )}
+              ))
+          ) : (
+            <div className="no-orders">
+              <p>No past orders</p>
+            </div>
+          )}
+          {Array.isArray(orders) && 
+            orders.filter(order => order && order.status && ['cancelled', 'delivered'].includes(order.status.toLowerCase())).length === 0 && (
+            <div className="no-orders">
+              <p>No past orders</p>
+            </div>
+          )}
         </div>
       </div>
 

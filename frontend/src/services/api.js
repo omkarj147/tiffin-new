@@ -13,16 +13,19 @@ const getApiUrl = () => {
 
 export const API_URL = getApiUrl();
 
-// Create axios instance
+// Create axios instance with optimized config
 const api = axios.create({
     baseURL: API_URL,
     headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache'
     },
-    withCredentials: true
+    withCredentials: true,
+    timeout: 30000, // 30 second timeout
+    timeoutErrorMessage: 'Request timed out. Please try again.'
 });
 
-// Add token to requests if it exists
+// Request interceptor with retry logic
 api.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('token');
@@ -36,29 +39,34 @@ api.interceptors.request.use(
     }
 );
 
-// Add response interceptor for error handling
+// Response interceptor with error handling and retry logic
 api.interceptors.response.use(
     (response) => response,
-    (error) => {
-        if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            if (error.response.status === 401) {
-                localStorage.removeItem('token');
-                window.location.href = '/login';
-            }
+    async (error) => {
+        const originalRequest = error.config;
+        
+        // Retry the request once if it failed
+        if (error.response?.status === 500 && !originalRequest._retry) {
+            originalRequest._retry = true;
+            return api(originalRequest);
         }
-        return Promise.reject(error);
+
+        if (error.response?.status === 401) {
+            localStorage.removeItem('token');
+            window.location.href = '/login';
+        }
+        
+        throw error.response?.data?.message || error.message || 'An error occurred';
     }
 );
 
-// Authentication functions
+// Authentication functions with optimized error handling
 export const login = async (email, password, userType) => {
     try {
         const response = await api.post('/auth/login', { email, password, userType });
         return response.data;
     } catch (error) {
-        throw error.response?.data?.message || 'Login failed';
+        throw error.response?.data?.message || 'Login failed. Please try again.';
     }
 };
 
@@ -67,7 +75,7 @@ export const signup = async (userData) => {
         const response = await api.post('/auth/register', userData);
         return response.data;
     } catch (error) {
-        throw error.response?.data?.message || 'Registration failed';
+        throw error.response?.data?.message || 'Registration failed. Please try again.';
     }
 };
 

@@ -20,7 +20,7 @@ const Menu = () => {
   const fetchWalletBalance = useCallback(async () => {
     try {
       const response = await api.get('/wallet/balance');
-      setWalletBalance(response.data.balance);
+        setWalletBalance(response.data.balance);
     } catch (err) {
       console.error('Error fetching wallet balance:', err);
     }

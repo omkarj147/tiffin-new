@@ -19,14 +19,19 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: ['https://tiffin-new-1.onrender.com', 'http://localhost:3000','https://tiffin-new.onrender.com'],
+    origin: [
+        'https://tiffin-new-1.onrender.com', 
+        'https://tiffin-new.onrender.com',
+        'http://localhost:3000', 
+        'http://localhost:5002'
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
 
-// Serve static files from the React app
+// Serve static files from the React app BEFORE other routes
 app.use(express.static(path.join(__dirname, '../frontend/build')));
 
 // API Routes
@@ -60,7 +65,8 @@ app.use('/api', (err, req, res, next) => {
     });
 });
 
-// Handle React routing, return all requests to React app
+// Catch-all handler for any requests that don't match the ones above
+// This ensures that client-side routing works on refresh
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
 });

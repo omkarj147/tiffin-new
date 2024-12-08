@@ -22,11 +22,15 @@ function Login() {
     try {
       const response = await login(formData.email, formData.password, userType);
       
+      if (!response || !response.token) {
+        throw new Error('Invalid login response');
+      }
+
       // Store user data in localStorage
       localStorage.setItem('token', response.token);
       localStorage.setItem('user', JSON.stringify({
         ...response.user,
-        userType: userType // Ensure userType is stored
+        userType
       }));
 
       // Dispatch a custom event to notify navbar
@@ -39,7 +43,8 @@ function Login() {
         navigate('/member/dashboard');
       }
     } catch (err) {
-      setError(err.toString());
+      console.error('Login failed:', err.response?.data?.error || err.message);
+      setError(err.response?.data?.error || err.message || 'Login failed');
     } finally {
       setLoading(false);
     }

@@ -146,7 +146,7 @@ function App() {
             <Route 
               path="admin/menu-management" 
               element={
-                <PrivateRoute>
+                <PrivateRoute requiredUserType="admin">
                   <MenuManagement />
                 </PrivateRoute>
               } 

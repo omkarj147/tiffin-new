@@ -83,7 +83,7 @@ const AdminDashboard = () => {
           <FaUtensils className="card-icon" />
           <h3>Menu Management</h3>
           <p>Add and manage menu items</p>
-          <Link to="/menu-management" className="dashboard-button">Manage Menu</Link>
+          <Link to="/admin/menu-management" className="dashboard-button">Manage Menu</Link>
         </div>
 
         <div className="dashboard-card">

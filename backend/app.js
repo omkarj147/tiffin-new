@@ -31,8 +31,14 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Serve static files from the React app BEFORE other routes
-app.use(express.static(path.join(__dirname, '../frontend/build')));
+// Serve static files from the React app with cache control
+app.use(express.static(path.join(__dirname, '../frontend/build'), {
+    setHeaders: (res, path) => {
+        if (path.endsWith('.html')) {
+            res.setHeader('Cache-Control', 'no-cache');
+        }
+    }
+}));
 
 // API Routes
 app.use('/api/auth', authRoutes);
@@ -65,10 +71,14 @@ app.use('/api', (err, req, res, next) => {
     });
 });
 
-// Catch-all handler for any requests that don't match the ones above
-// This ensures that client-side routing works on refresh
+// Catch-all route for SPA routing
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+    // Only serve index.html for non-API routes
+    if (!req.path.startsWith('/api')) {
+        res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+    } else {
+        res.status(404).json({ message: 'Not Found' });
+    }
 });
 
 module.exports = app;

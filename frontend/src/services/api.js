@@ -1,8 +1,11 @@
 import axios from 'axios';
 
+// Determine API URL based on environment
 export const API_URL = window.location.hostname === 'localhost'
-  ? 'http://localhost:5002/api'
-  : 'https://tiffin-new.onrender.com/api';
+  ? (window.location.port === '5002' 
+      ? 'http://localhost:5002/api' 
+      : 'http://localhost:3000/api')
+  : '/api';
 
 // Create axios instance
 const api = axios.create({
@@ -21,6 +24,42 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
+// Add error interceptor
+api.interceptors.response.use(
+    response => response,
+    error => {
+        console.error('API Error:', error);
+        
+        // Handle specific error scenarios
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            switch (error.response.status) {
+                case 401:
+                    // Redirect to login or handle unauthorized access
+                    window.location.href = '/login';
+                    break;
+                case 404:
+                    console.error('Resource not found:', error.response.config.url);
+                    break;
+                case 500:
+                    console.error('Server error');
+                    break;
+                default:
+                    console.error('Unexpected error');
+            }
+        } else if (error.request) {
+            // The request was made but no response was received
+            console.error('No response received:', error.request);
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            console.error('Error setting up request:', error.message);
+        }
+        
+        return Promise.reject(error);
+    }
+);
+
 export const login = async (email, password, userType) => {
     try {
         const response = await api.post('/auth/login', { email, password, userType });
@@ -30,7 +69,8 @@ export const login = async (email, password, userType) => {
         }
         return response.data;
     } catch (error) {
-        throw error.response?.data?.error || 'Login failed';
+        console.error('Login error:', error);
+        throw error;
     }
 };
 
@@ -43,7 +83,8 @@ export const signup = async (userData) => {
         }
         return response.data;
     } catch (error) {
-        throw error.response?.data?.error || 'Signup failed';
+        console.error('Signup error:', error);
+        throw error;
     }
 };
 

@@ -64,12 +64,6 @@ const MenuManagement = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const user = JSON.parse(localStorage.getItem('user'));
-
-      if (!token || !user || user.userType !== 'admin') {
-        toast.error('You must be logged in as an admin to perform this action');
-        return;
-      }
 
       const config = {
         headers: {

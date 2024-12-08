@@ -10,17 +10,17 @@ const wss = new WebSocket.Server({
         origin: 'http://localhost:3000',
         methods: ['GET', 'POST']
     }
-});
+}); 
 
 wss.on('connection', (ws) => {
-    console.log('New WebSocket connection');
+    //console.log('New WebSocket connection');
     
     // Send initial connection success message
     ws.send(JSON.stringify({ type: 'connection', status: 'connected' }));
     
     ws.on('message', (message) => {
         try {
-            console.log('Received:', message.toString());
+            //console.log('Received:', message.toString());
             // Echo the message back for testing
             ws.send(message.toString());
         } catch (error) {

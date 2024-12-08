@@ -44,29 +44,33 @@
   width: 32px;
   height: 32px;
   border: none;
-  background: none;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   position: relative;
+  background-color: black; /* Change circle background to black */
+  border-radius: 50%; /* Ensure it's a circle */
 }
-
 .arrow-button::before {
   content: '';
   width: 10px;
   height: 10px;
-  border-left: 3px solid #ff6b6b;
-  border-bottom: 3px solid #ff6b6b;
+  border-left: 3px solid white; /* Change arrow color to white for contrast */
+  border-bottom: 3px solid white; /* Change arrow color to white for contrast */
   transform: rotate(45deg);
   position: absolute;
+}
+
+.arrow-button {
+  background-color: #fff !important;
 }
 
 .wallet-balance-card {
   background-color: #fff;
   border-radius: 8px;
   padding: 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(235, 230, 230, 0.1);
   text-align: center;
   margin-bottom: 2rem;
 }
@@ -108,7 +112,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #13912f;
 }
 
 .transaction-type {

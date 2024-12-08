@@ -4,6 +4,7 @@ import { FaUsers, FaUtensils, FaChartBar, FaCog } from 'react-icons/fa';
 import UserManagement from './UserManagement';
 import OrderManagement from './OrderManagement';
 import ReportsManagement from './ReportsManagement';
+import MenuManagement from '../Menu/MenuManagement';
 import './Dashboard.css';
 
 const AdminDashboard = () => {
@@ -82,7 +83,7 @@ const AdminDashboard = () => {
           <FaUtensils className="card-icon" />
           <h3>Menu Management</h3>
           <p>Add and manage menu items</p>
-          <Link to="/admin/menu" className="dashboard-button">Manage Menu</Link>
+          <Link to="/menu-management" className="dashboard-button">Manage Menu</Link>
         </div>
 
         <div className="dashboard-card">
@@ -97,6 +98,10 @@ const AdminDashboard = () => {
           </button>
         </div>
       </div>
+      {activeComponent === 'menu' && <MenuManagement onBack={() => setActiveComponent(null)} />}
+      {activeComponent === 'users' && <UserManagement onBack={() => setActiveComponent(null)} />}
+      {activeComponent === 'orders' && <OrderManagement onBack={() => setActiveComponent(null)} />}
+      {activeComponent === 'reports' && <ReportsManagement onBack={() => setActiveComponent(null)} />}
     </div>
   );
 };

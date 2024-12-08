@@ -32,10 +32,6 @@ const seedRoutes = require('./routes/seed');
 const walletRoutes = require('./routes/wallet');
 
 // Logging middleware
-app.use((req, res, next) => {
-    console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
-    next();
-});
 
 // API Routes
 app.use('/api/auth', authRoutes);

@@ -6,12 +6,12 @@ const Menu = require('../models/Menu');
 // Get all menu items - Public route
 router.get('/', async (req, res) => {
   try {
-    console.log('Fetching menu items');
+    
     
     const menuItems = await Menu.find({ isDeleted: false })
       .sort({ createdAt: -1 });
     
-    console.log('Found menu items:', menuItems ? menuItems.length : 0);
+    
     
     if (!menuItems || menuItems.length === 0) {
       console.log('No menu items found');
@@ -34,7 +34,7 @@ router.get('/', async (req, res) => {
       return isValid;
     });
     
-    console.log('Sending valid menu items:', validMenuItems.length);
+  
     res.json(validMenuItems);
   } catch (error) {
     console.error('Error fetching menu items:', error);
@@ -45,7 +45,7 @@ router.get('/', async (req, res) => {
 // Add new menu item (Admin only)
 router.post('/', auth, async (req, res) => {
   try {
-    console.log('Adding new menu item for user:', req.user._id);
+    
     
     if (req.user.userType !== 'admin') {
       console.log('Access denied. Admin only.');
@@ -74,7 +74,7 @@ router.post('/', auth, async (req, res) => {
     }
 
     const savedMenuItem = await menuItem.save();
-    console.log('Menu item added successfully:', savedMenuItem);
+    
     res.status(201).json(savedMenuItem);
   } catch (error) {
     console.error('Error adding menu item:', error);
@@ -125,7 +125,7 @@ router.put('/:id', auth, async (req, res) => {
       return res.status(400).json({ message: 'Invalid updated menu item' });
     }
 
-    console.log('Menu item updated successfully:', updatedMenuItem);
+    
     res.json(updatedMenuItem);
   } catch (error) {
     console.error('Error updating menu item:', error);
@@ -159,7 +159,7 @@ router.delete('/:id', auth, async (req, res) => {
       return res.status(404).json({ message: 'Menu item not found' });
     }
 
-    console.log('Menu item deleted successfully');
+    
     res.json({ message: 'Menu item deleted successfully' });
   } catch (error) {
     console.error('Error deleting menu item:', error);

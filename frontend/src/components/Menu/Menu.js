@@ -38,10 +38,10 @@ const Menu = () => {
         return;
       }
 
-      console.log('Fetching menu items...');
+      
       const response = await api.get('/menu');
       
-      console.log('Menu response:', response.data);
+      
       
       if (!response.data) {
         throw new Error('No data received from server');
@@ -79,9 +79,6 @@ const Menu = () => {
         
         return true;
       });
-
-      console.log('Valid menu items:', validItems);
-
       if (validItems.length === 0) {
         setError('No valid menu items available');
       } else {
@@ -121,7 +118,7 @@ const Menu = () => {
       return;
     }
     
-    console.log('Initial menu fetch...');
+   
     fetchMenu();
     fetchWalletBalance();
 

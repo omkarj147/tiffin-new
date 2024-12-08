@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signup } from '../../services/api';
 import './Auth.css';
+import ProtectedAuth from './ProtectedAuth';
 
 function Signup() {
   const navigate = useNavigate();
@@ -48,102 +49,104 @@ function Signup() {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-box">
-        <div className="auth-header">
-          <h2>Create Account</h2>
-          <p>Join us for delicious tiffin service</p>
-        </div>
-        {error && <div className="error-message">{error}</div>}
-        <div className="user-type-selector">
-          <button
-            className={`user-type-button ${userType === 'member' ? 'active' : ''}`}
-            onClick={() => setUserType('member')}
-            type="button"
-          >
-            Member
-          </button>
-          <button
-            className={`user-type-button ${userType === 'admin' ? 'active' : ''}`}
-            onClick={() => setUserType('admin')}
-            type="button"
-          >
-            Admin
-          </button>
-        </div>
-        <form className="auth-form" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder=" "
-              required
-            />
-            <label htmlFor="name">Full Name</label>
+    <ProtectedAuth>
+      <div className="auth-container">
+        <div className="auth-box">
+          <div className="auth-header">
+            <h2>Create Account</h2>
+            <p>Join us for delicious tiffin service</p>
           </div>
-          <div className="form-group">
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder=" "
-              required
-            />
-            <label htmlFor="email">Email</label>
+          {error && <div className="error-message">{error}</div>}
+          <div className="user-type-selector">
+            <button
+              className={`user-type-button ${userType === 'member' ? 'active' : ''}`}
+              onClick={() => setUserType('member')}
+              type="button"
+            >
+              Member
+            </button>
+            <button
+              className={`user-type-button ${userType === 'admin' ? 'active' : ''}`}
+              onClick={() => setUserType('admin')}
+              type="button"
+            >
+              Admin
+            </button>
           </div>
-          <div className="form-group">
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              placeholder=" "
-              required
-            />
-            <label htmlFor="phone">Phone Number</label>
+          <form className="auth-form" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder=" "
+                required
+              />
+              <label htmlFor="name">Full Name</label>
+            </div>
+            <div className="form-group">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder=" "
+                required
+              />
+              <label htmlFor="email">Email</label>
+            </div>
+            <div className="form-group">
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder=" "
+                required
+              />
+              <label htmlFor="phone">Phone Number</label>
+            </div>
+            <div className="form-group">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder=" "
+                required
+              />
+              <label htmlFor="password">Password</label>
+            </div>
+            <div className="form-group">
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder=" "
+                required
+              />
+              <label htmlFor="confirmPassword">Confirm Password</label>
+            </div>
+            <button type="submit" className="auth-button" disabled={loading}>
+              {loading ? 'Creating Account...' : 'Sign Up'}
+            </button>
+          </form>
+          <div className="auth-switch">
+            <p>
+              Already have an account?
+              <Link to="/login">Login</Link>
+            </p>
           </div>
-          <div className="form-group">
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder=" "
-              required
-            />
-            <label htmlFor="password">Password</label>
-          </div>
-          <div className="form-group">
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder=" "
-              required
-            />
-            <label htmlFor="confirmPassword">Confirm Password</label>
-          </div>
-          <button type="submit" className="auth-button" disabled={loading}>
-            {loading ? 'Creating Account...' : 'Sign Up'}
-          </button>
-        </form>
-        <div className="auth-switch">
-          <p>
-            Already have an account?
-            <Link to="/login">Login</Link>
-          </p>
         </div>
       </div>
-    </div>
+    </ProtectedAuth>
   );
 }
 

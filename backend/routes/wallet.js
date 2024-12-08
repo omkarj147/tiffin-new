@@ -38,7 +38,7 @@ router.get('/transactions', auth, async (req, res) => {
 // Add funds to wallet
 router.post('/add-funds', auth, async (req, res) => {
   try {
-    console.log('Adding funds for user:', req.user.id, 'Amount:', req.body.amount);
+    //You can add validation here
     const { amount } = req.body;
     
     if (!amount || amount <= 0) {
@@ -66,7 +66,6 @@ router.post('/add-funds', auth, async (req, res) => {
     user.walletBalance = newBalance;
     await user.save();
 
-    console.log('Funds added successfully. New balance:', newBalance);
     res.json({ 
       message: 'Funds added successfully',
       balance: newBalance 

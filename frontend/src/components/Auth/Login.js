@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../../services/api';
 import './Auth.css';
+import ProtectedAuth from './ProtectedAuth';
 
 function Login() {
   const navigate = useNavigate();
@@ -52,66 +53,68 @@ function Login() {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-box">
-        <div className="auth-header">
-          <h2>Welcome Back!</h2>
-          <p>Please sign in to continue</p>
-        </div>
-        {error && <div className="error-message">{error}</div>}
-        <div className="user-type-selector">
-          <button
-            className={`user-type-button ${userType === 'member' ? 'active' : ''}`}
-            onClick={() => setUserType('member')}
-            type="button"
-          >
-            Member
-          </button>
-          <button
-            className={`user-type-button ${userType === 'admin' ? 'active' : ''}`}
-            onClick={() => setUserType('admin')}
-            type="button"
-          >
-            Admin
-          </button>
-        </div>
-        <form className="auth-form" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder=" "
-              required
-            />
-            <label htmlFor="email">Email</label>
+    <ProtectedAuth>
+      <div className="auth-container">
+        <div className="auth-box">
+          <div className="auth-header">
+            <h2>Welcome Back!</h2>
+            <p>Please sign in to continue</p>
           </div>
-          <div className="form-group">
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder=" "
-              required
-            />
-            <label htmlFor="password">Password</label>
+          {error && <div className="error-message">{error}</div>}
+          <div className="user-type-selector">
+            <button
+              className={`user-type-button ${userType === 'member' ? 'active' : ''}`}
+              onClick={() => setUserType('member')}
+              type="button"
+            >
+              Member
+            </button>
+            <button
+              className={`user-type-button ${userType === 'admin' ? 'active' : ''}`}
+              onClick={() => setUserType('admin')}
+              type="button"
+            >
+              Admin
+            </button>
           </div>
-          <button type="submit" className="auth-button" disabled={loading}>
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
-        <div className="auth-switch">
-          <p>
-            Don't have an account?{' '}
-            <Link to="/signup">Sign up</Link>
-          </p>
+          <form className="auth-form" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder=" "
+                required
+              />
+              <label htmlFor="email">Email</label>
+            </div>
+            <div className="form-group">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder=" "
+                required
+              />
+              <label htmlFor="password">Password</label>
+            </div>
+            <button type="submit" className="auth-button" disabled={loading}>
+              {loading ? 'Logging in...' : 'Login'}
+            </button>
+          </form>
+          <div className="auth-switch">
+            <p>
+              Don't have an account?{' '}
+              <Link to="/signup">Sign up</Link>
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+    </ProtectedAuth>
   );
 }
 

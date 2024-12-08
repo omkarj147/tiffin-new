@@ -4,6 +4,8 @@ import axios from 'axios';
 import { FaPlus, FaMinus, FaShoppingCart, FaWallet, FaTimes } from 'react-icons/fa';
 import './Menu.css';
 import { API_URL } from '../../services/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Menu = () => {
   const navigate = useNavigate();
@@ -165,10 +167,11 @@ const Menu = () => {
       setWalletBalance(prevBalance => prevBalance - totalAmount);
 
       setOrderSuccess(true);
+      toast.success('Order placed successfully! Redirecting to orders page...');
       clearCart();
       setTimeout(() => {
         setOrderSuccess(false);
-        navigate('/member/dashboard');
+        navigate('/orders');
       }, 2000);
 
     } catch (error) {
@@ -202,6 +205,18 @@ const Menu = () => {
 
   return (
     <div className="menu-container">
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       {insufficientFunds && (
         <div className="error-popup">
           Insufficient funds! Please add money to your wallet.
@@ -298,7 +313,7 @@ const Menu = () => {
             <div className="timer-icon">🧾</div>
             <div className="delivery-details">
               <h2>Order Summary</h2>
-              <p>Got</p>
+              <p></p>
             </div>
           </div>
 

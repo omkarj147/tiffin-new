@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Wallet.css';
 import { API_URL } from '../../services/api';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Wallet = () => {
   const navigate = useNavigate();
@@ -62,8 +64,10 @@ const Wallet = () => {
       setAmount('');
       setShowAddFunds(false);
       fetchWalletData(); // Refresh wallet data
+      toast.success(`Successfully added ₹${amount} to your wallet!`);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to add funds');
+      toast.error(err.response?.data?.message || 'Failed to add funds');
     }
   };
 
@@ -79,6 +83,18 @@ const Wallet = () => {
   );
   return (
     <div className="wallet-container">
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="header-container">
         <button className="arrow-button" onClick={() => navigate('/member/dashboard')}></button>
         <div className="title-card">

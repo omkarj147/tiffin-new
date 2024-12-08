@@ -12,25 +12,28 @@ const orderRoutes = require('./routes/orders');
 const reportRoutes = require('./routes/reports');
 const seedRoutes = require('./routes/seed');
 const walletRoutes = require('./routes/wallet');
+const pwaRoutes = require('./routes/pwaRoutes');
 
 dotenv.config();
 const app = express();
 
 // Middleware
 app.use(cors({
-    origin: ['https://tiffin-new-1.onrender.com', 'http://localhost:3000','https://tiffin-new.onrender.com'], // Add your deployed frontend URL here
+    origin: ['https://tiffin-new-1.onrender.com', 'http://localhost:3000','https://tiffin-new.onrender.com'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../frontend/public')));
 
-// Simple favicon response
-app.get('/favicon.ico', (req, res) => {
-    res.set('Content-Type', 'image/x-icon');
-    res.status(200).send('');
-});
+// API Routes - These should come before static file serving
+app.use('/api/auth', authRoutes);
+app.use('/api/menu', menuRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/reports', reportRoutes);
+app.use('/api/seed', seedRoutes);
+app.use('/api/wallet', walletRoutes);
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI, {
@@ -45,22 +48,21 @@ app.get('/api/test', (req, res) => {
     res.json({ message: 'Server is running' });
 });
 
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/menu', menuRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/reports', reportRoutes);
-app.use('/api/seed', seedRoutes);
-app.use('/api/wallet', walletRoutes);
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-    console.error('Error:', err);
+// Error handling middleware for API routes
+app.use('/api', (err, req, res, next) => {
+    console.error('API Error:', err);
     res.status(err.status || 500).json({ 
         message: err.message || 'Something went wrong!',
         error: process.env.NODE_ENV === 'development' ? err : {}
     });
+});
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+// Handle all other routes for SPA
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
 });
 
 module.exports = app;

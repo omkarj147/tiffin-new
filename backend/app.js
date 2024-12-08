@@ -17,15 +17,17 @@ app.use((req, res, next) => {
     next();
 });
 
-// CORS configuration
+// Comprehensive CORS configuration
 app.use(cors({
     origin: [
         'https://tiffin-new-1.onrender.com',
-        'http://localhost:3000'
+        //'http://localhost:5002',
+        'http://localhost:3000',
+        'https://tiffin-new.onrender.com'
     ],
-    credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 }));
 
 app.use(express.json());

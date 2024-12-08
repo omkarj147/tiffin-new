@@ -4,12 +4,14 @@
   "description": "Frontend for MERN stack application",
   "main": "index.js",
   "homepage": ".",
-  "proxy": "http://localhost:5002",
+  "proxy":"https://tiffin-new.onrender.com",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "serve -s build"
   },
   "dependencies": {
     "axios": "^1.7.8",

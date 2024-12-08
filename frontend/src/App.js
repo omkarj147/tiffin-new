@@ -1,9 +1,5 @@
-import React, { useEffect } from 'react';
-import { 
-  createBrowserRouter,
-  RouterProvider,
-  Outlet
-} from 'react-router-dom';
+import React from 'react';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Login from './components/Auth/Login';
@@ -18,18 +14,6 @@ import Wallet from './components/Wallet/Wallet';
 import PWAManager from './pwa/pwaManager';
 
 const Layout = () => {
-  useEffect(() => {
-    // Initialize PWA and store reference for cleanup
-    const pwa = new PWAManager();
-    
-    // Return cleanup function
-    return () => {
-      if (pwa && typeof pwa.cleanup === 'function') {
-        pwa.cleanup();
-      }
-    };
-  }, []);
-
   return (
     <div className="App">
       <Navbar />
@@ -38,30 +22,26 @@ const Layout = () => {
   );
 };
 
-const router = createBrowserRouter([
-  {
-    element: <Layout />,
-    children: [
-      { index: true, element: <Home /> },
-      { path: "login", element: <Login /> },
-      { path: "signup", element: <Signup /> },
-      { path: "member/dashboard", element: <MemberDashboard /> },
-      { path: "menu", element: <Menu /> },
-      { path: "orders", element: <Orders /> },
-      { path: "wallet", element: <Wallet /> },
-      { path: "profile", element: <Profile /> },
-      { path: "admin/menu", element: <MenuManagement /> },
-      { path: "admin/dashboard", element: <AdminDashboard /> },
-    ]
-  }
-], {
-  future: {
-    v7_startTransition: true
-  }
-});
-
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="login" element={<Login />} />
+          <Route path="signup" element={<Signup />} />
+          <Route path="member/dashboard" element={<MemberDashboard />} />
+          <Route path="menu" element={<Menu />} />
+          <Route path="orders" element={<Orders />} />
+          <Route path="wallet" element={<Wallet />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="admin/menu" element={<MenuManagement />} />
+          <Route path="admin/dashboard" element={<AdminDashboard />} />
+        </Route>
+        <Route path="*" element={<Navigate to="/member/dashboard" replace />} />
+      </Routes>
+    </Router>
+  );
 }
 
 // Enable hot module replacement

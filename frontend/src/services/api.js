@@ -18,7 +18,7 @@ const api = axios.create({
     baseURL: API_URL,
     headers: {
         'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache'
+        'Accept': 'application/json'
     },
     withCredentials: true,
     timeout: 30000, // 30 second timeout
@@ -66,6 +66,7 @@ export const login = async (email, password, userType) => {
         const response = await api.post('/auth/login', { email, password, userType });
         return response.data;
     } catch (error) {
+        console.error('Login Error:', error);
         throw error.response?.data?.message || 'Login failed. Please try again.';
     }
 };
@@ -75,6 +76,7 @@ export const signup = async (userData) => {
         const response = await api.post('/auth/register', userData);
         return response.data;
     } catch (error) {
+        console.error('Signup Error:', error);
         throw error.response?.data?.message || 'Registration failed. Please try again.';
     }
 };

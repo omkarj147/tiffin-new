@@ -1,18 +1,25 @@
 import axios from 'axios';
 
 // Determine API URL based on environment
-export const API_URL = window.location.hostname === 'localhost'
-  ? (window.location.port === '5002' 
-      ? 'http://localhost:5002/api' 
-      : 'http://localhost:3000/api')
-  : '/api';
+const getApiUrl = () => {
+    const hostname = window.location.hostname;
+    if (hostname === 'localhost') {
+        return 'http://localhost:5002/api';
+    } else if (hostname === 'tiffin-new-1.onrender.com') {
+        return 'https://tiffin-new.onrender.com/api';
+    }
+    return '/api'; // fallback
+};
+
+export const API_URL = getApiUrl();
 
 // Create axios instance
 const api = axios.create({
     baseURL: API_URL,
     headers: {
         'Content-Type': 'application/json'
-    }
+    },
+    withCredentials: true // Enable sending cookies
 });
 
 // Add token to requests if it exists

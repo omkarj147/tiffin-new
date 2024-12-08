@@ -1,34 +1,33 @@
 services:
   - type: web
-    name: tiffin-service-backend
-    env: node
-    buildCommand: cd backend && npm install
-    startCommand: cd backend && npm start
-    envVars:
-      - key: MONGODB_URI
-        fromDatabase:
-          name: tiffin-db
-          property: connectionString
-      - key: JWT_SECRET
-        generateValue: true
-      - key: NODE_ENV
-        value: production
-      - key: FRONTEND_URL
-        value: https://tiffin-new-1.onrender.com
-
-  - type: web
-    name: tiffin-service-frontend
+    name: tiffin-frontend
     env: static
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: ./frontend/build
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
+      - path: /*
+        name: Content-Security-Policy
+        value: "frame-ancestors 'none'"
     routes:
       - type: rewrite
         source: /*
         destination: /index.html
-    headers:
-      - path: /*
-        name: Cache-Control
-        value: no-cache, no-store, must-revalidate
     envVars:
-      - key: REACT_APP_API_URL
-        value: https://tiffin-new.onrender.com/api
+      - key: NODE_ENV
+        value: production
+
+  - type: web
+    name: tiffin-backend
+    env: node
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false

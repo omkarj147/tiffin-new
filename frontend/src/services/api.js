@@ -52,4 +52,23 @@ api.interceptors.response.use(
     }
 );
 
+// Authentication functions
+export const login = async (email, password, userType) => {
+    try {
+        const response = await api.post('/auth/login', { email, password, userType });
+        return response.data;
+    } catch (error) {
+        throw error.response?.data?.message || 'Login failed';
+    }
+};
+
+export const signup = async (userData) => {
+    try {
+        const response = await api.post('/auth/register', userData);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data?.message || 'Registration failed';
+    }
+};
+
 export default api;

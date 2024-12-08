@@ -26,7 +26,10 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// API Routes - These should come before static file serving
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/menu', menuRoutes);
 app.use('/api/users', userRoutes);
@@ -57,10 +60,7 @@ app.use('/api', (err, req, res, next) => {
     });
 });
 
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, '../frontend/build')));
-
-// Handle all other routes for SPA
+// Handle React routing, return all requests to React app
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
 });

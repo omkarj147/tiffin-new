@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Frontend for MERN stack application",
   "main": "index.js",
-  "homepage": "https://tiffin-new-1.onrender.com",
+  "homepage": ".",
   "proxy": "http://localhost:5002",
   "scripts": {
     "start": "react-scripts start",

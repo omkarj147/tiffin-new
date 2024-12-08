@@ -8,7 +8,7 @@ const getApiUrl = () => {
     } else if (hostname === 'tiffin-new-1.onrender.com') {
         return 'https://tiffin-new.onrender.com/api';
     }
-    return '/api'; // fallback
+    return '/api'; // fallback for production
 };
 
 export const API_URL = getApiUrl();
@@ -51,38 +51,5 @@ api.interceptors.response.use(
         return Promise.reject(error);
     }
 );
-
-export const login = async (email, password, userType) => {
-    try {
-        const response = await api.post('/auth/login', { email, password, userType });
-        if (response.data.token) {
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data.user));
-        }
-        return response.data;
-    } catch (error) {
-        console.error('Login error:', error);
-        throw error;
-    }
-};
-
-export const signup = async (userData) => {
-    try {
-        const response = await api.post('/auth/signup', userData);
-        if (response.data.token) {
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data.user));
-        }
-        return response.data;
-    } catch (error) {
-        console.error('Signup error:', error);
-        throw error;
-    }
-};
-
-export const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-};
 
 export default api;

@@ -8,20 +8,10 @@ dotenv.config();
 
 const app = express();
 
-// Logging middleware
-app.use((req, res, next) => {
-    console.log(`[ROUTE DEBUG] ${new Date().toISOString()}`);
-    console.log(`[ROUTE DEBUG] Full URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`);
-    console.log(`[ROUTE DEBUG] Method: ${req.method}`);
-    console.log(`[ROUTE DEBUG] Path: ${req.path}`);
-    next();
-});
-
 // Comprehensive CORS configuration
 app.use(cors({
     origin: [
         'https://tiffin-new-1.onrender.com',
-        //'http://localhost:5002',
         'http://localhost:3000',
         'https://tiffin-new.onrender.com'
     ],
@@ -40,6 +30,12 @@ const orderRoutes = require('./routes/orders');
 const reportRoutes = require('./routes/reports');
 const seedRoutes = require('./routes/seed');
 const walletRoutes = require('./routes/wallet');
+
+// Logging middleware
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+    next();
+});
 
 // API Routes
 app.use('/api/auth', authRoutes);
@@ -70,7 +66,7 @@ app.get('*', (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    console.error('[ROUTE DEBUG] Unhandled error:', err);
+    console.error('Unhandled error:', err);
     res.status(500).json({ 
         message: 'Something went wrong!',
         error: process.env.NODE_ENV === 'development' ? err.toString() : {}

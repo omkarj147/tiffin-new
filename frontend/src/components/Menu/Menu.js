@@ -252,7 +252,7 @@ const Menu = () => {
         </div>
       )}
       <div className="menu-header">
-        <h1>Today's Menu</h1>
+        <h2 className='menu-header-text'>Today's Menu</h2>
         <div className="header-actions">
           <button 
             className="cart-btn"

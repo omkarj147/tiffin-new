@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #1a1a1a 0%, #65676b 100%);
+  background: linear-gradient(135deg, #ffc803 0%, #eb0101 100%);
   min-height: 100vh;
   padding: 20px;
 }
@@ -90,7 +90,7 @@
 }
 
 .auth-button {
-  background: #1a1a1a;
+  background: #eb0101;
   color: white;
   padding: 15px;
   border: none;
@@ -122,17 +122,17 @@
 
 .user-type-button {
   padding: 10px 25px;
-  border: 2px solid #1a1a1a;
+  border: 2px solid #eb0101;
   border-radius: 30px;
   background: transparent;
-  color: #1a1a1a;
+  color: #eb0101;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .user-type-button.active {
-  background: #1a1a1a;
+  background: #eb0101;
   color: white;
 }
 

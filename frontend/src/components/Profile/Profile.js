@@ -26,7 +26,7 @@ const Profile = () => {
           </div>
           <h1>{user.name}</h1>
           <p>{user.email}</p>
-          <span className="user-type" >{user.userType}</span>
+          <span className="user-type-member" >{user.userType}</span>
         </div>
         
         <div className="profile-info">

@@ -13,7 +13,7 @@
 }
 
 .profile-header {
-  background: linear-gradient(135deg, #1a1a1a 0%, #65676b 100%);
+  background: linear-gradient(135deg, #eb0101 0%, #eb0101 100%);
   color: white;
   padding: 2rem;
   text-align: center;
@@ -48,12 +48,19 @@
 }
 
 .user-type {
-  background: rgba(186, 181, 182, 0.2);
+  background: rgba(251, 246, 247, 0.2);
   padding: 0.3rem 1rem;
   border-radius: 20px;
   font-size: 0.9rem;
   text-transform: capitalize;
-  color: #ffffff !important;
+}
+.user-type-member {
+  color: #f0f0f0 !important;
+  background: rgba(251, 246, 247, 0.2);
+  padding: 0.3rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  text-transform: capitalize;
 }
 
 .profile-info {
@@ -103,8 +110,8 @@
 }
 
 .edit-profile-btn {
-  background-color: #1a1a1a;
-  color: white;
+  background-color: #ffc803;
+  color: black;
 }
 
 .edit-profile-btn:hover {

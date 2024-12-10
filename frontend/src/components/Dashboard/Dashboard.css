@@ -2,15 +2,16 @@
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  background: linear-gradient(135deg, #d8d6d6 0%, #d8d6d6 100%);
 }
 
 .dashboard-header {
   text-align: center;
   margin-bottom: 2rem;
   padding: 2rem;
-  background: linear-gradient(135deg, #1a1a1a 0%, #65676b 100%);
+  background: linear-gradient(135deg, #fff 0%, #fff 100%);
   border-radius: 10px;
-  color: white;
+  color: #eb0101;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -23,14 +24,14 @@
   margin: 0;
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
-  color: white;
+  color: #eb0101;
 }
 
 .dashboard-header p {
   margin: 0;
   font-size: 1.2rem;
   opacity: 0.9;
-  color: #f0f0f0;
+  color: black;
 }
 
 .dashboard-grid {
@@ -43,7 +44,7 @@
 }
 
 .dashboard-card {
-  background: white;
+  background: linear-gradient(135deg, #fff 0%, #fff 100%);
   border-radius: 12px;
   padding: 2rem;
   text-align: center;
@@ -62,25 +63,26 @@
 
 .card-icon {
   font-size: 2.5rem;
-  color: #1a1a1a;
+  color: #eb0101;
   margin-bottom: 0.5rem;
 }
 
 .dashboard-card h3 {
   margin: 0;
-  color: #333;
+  color: #eb0101;
   font-size: 1.5rem;
 }
 
 .dashboard-card p {
   margin: 0;
-  color: #666;
+  color: #eb0101;
   line-height: 1.5;
 }
 
 .dashboard-button {
-  background-color: #1a1a1a;
+  background-color: #eb0101;
   color: white;
+  font-size: large;
   border: none;
   padding: 0.8rem 1.5rem;
   border-radius: 6px;
